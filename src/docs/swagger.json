@@ -175,72 +175,38 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ChallengeNameType": {
-				"type": "string",
-				"enum": [
-					"ADMIN_NO_SRP_AUTH",
-					"CUSTOM_CHALLENGE",
-					"DEVICE_PASSWORD_VERIFIER",
-					"DEVICE_SRP_AUTH",
-					"EMAIL_OTP",
-					"MFA_SETUP",
-					"NEW_PASSWORD_REQUIRED",
-					"PASSWORD_VERIFIER",
-					"SELECT_MFA_TYPE",
-					"SMS_MFA",
-					"SOFTWARE_TOKEN_MFA"
-				]
-			},
-			"Record_string.string_": {
-				"properties": {},
-				"additionalProperties": {
-					"type": "string"
-				},
-				"type": "object",
-				"description": "Construct a type with a set of properties K of type T"
-			},
-			"NewDeviceMetadataType": {
-				"description": "<p>The new device metadata type.</p>",
+			"AttributeType": {
+				"description": "<p>Specifies whether the attribute is standard or custom.</p>",
 				"properties": {
-					"DeviceKey": {
+					"Name": {
 						"type": "string",
-						"description": "<p>The device key.</p>"
+						"description": "<p>The name of the attribute.</p>"
 					},
-					"DeviceGroupKey": {
+					"Value": {
 						"type": "string",
-						"description": "<p>The device group key.</p>"
+						"description": "<p>The value of the attribute.</p>"
 					}
 				},
 				"type": "object",
 				"additionalProperties": false
 			},
-			"AuthenticationResultType": {
-				"description": "<p>The authentication result.</p>",
+			"DeliveryMediumType": {
+				"type": "string",
+				"enum": [
+					"EMAIL",
+					"SMS"
+				]
+			},
+			"MFAOptionType": {
+				"description": "<p>\n            <i>This data type is no longer supported.</i> Applies only to SMS\n            multi-factor authentication (MFA) configurations. Does not apply to time-based one-time\n            password (TOTP) software token MFA configurations.</p>",
 				"properties": {
-					"AccessToken": {
+					"DeliveryMedium": {
+						"$ref": "#/components/schemas/DeliveryMediumType",
+						"description": "<p>The delivery medium to send the MFA code. You can use this parameter to set only the\n                <code>SMS</code> delivery medium value.</p>"
+					},
+					"AttributeName": {
 						"type": "string",
-						"description": "<p>A valid access token that Amazon Cognito issued to the user who you want to\n            authenticate.</p>"
-					},
-					"ExpiresIn": {
-						"type": "number",
-						"format": "double",
-						"description": "<p>The expiration period of the authentication result in seconds.</p>"
-					},
-					"TokenType": {
-						"type": "string",
-						"description": "<p>The token type.</p>"
-					},
-					"RefreshToken": {
-						"type": "string",
-						"description": "<p>The refresh token.</p>"
-					},
-					"IdToken": {
-						"type": "string",
-						"description": "<p>The ID token.</p>"
-					},
-					"NewDeviceMetadata": {
-						"$ref": "#/components/schemas/NewDeviceMetadataType",
-						"description": "<p>The new device metadata from an authentication result.</p>"
+						"description": "<p>The attribute name of the MFA option type. The only valid value is\n                <code>phone_number</code>.</p>"
 					}
 				},
 				"type": "object",
@@ -279,23 +245,36 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"InitiateAuthCommandOutput": {
+			"GetUserCommandOutput": {
 				"properties": {
-					"ChallengeName": {
-						"$ref": "#/components/schemas/ChallengeNameType",
-						"description": "<p>The name of the challenge that you're responding to with this call. This name is\n            returned in the <code>InitiateAuth</code> response if you must pass another\n            challenge.</p>\n         <p>Valid values include the following:</p>\n         <note>\n            <p>All of the following challenges require <code>USERNAME</code> and\n                    <code>SECRET_HASH</code> (if applicable) in the parameters.</p>\n         </note>\n         <ul>\n            <li>\n               <p>\n                  <code>SMS_MFA</code>: Next challenge is to supply an\n                    <code>SMS_MFA_CODE</code>that your user pool delivered\n                    in an SMS message.</p>\n            </li>\n            <li>\n               <p>\n                  <code>EMAIL_OTP</code>: Next challenge is to supply an\n                    <code>EMAIL_OTP_CODE</code> that your user pool delivered\n                    in an email message.</p>\n            </li>\n            <li>\n               <p>\n                  <code>PASSWORD_VERIFIER</code>: Next challenge is to supply\n                        <code>PASSWORD_CLAIM_SIGNATURE</code>,\n                        <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, and <code>TIMESTAMP</code> after\n                    the client-side SRP calculations.</p>\n            </li>\n            <li>\n               <p>\n                  <code>CUSTOM_CHALLENGE</code>: This is returned if your custom authentication\n                    flow determines that the user should pass another challenge before tokens are\n                    issued.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DEVICE_SRP_AUTH</code>: If device tracking was activated on your user\n                    pool and the previous challenges were passed, this challenge is returned so that\n                    Amazon Cognito can start tracking this device.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DEVICE_PASSWORD_VERIFIER</code>: Similar to\n                        <code>PASSWORD_VERIFIER</code>, but for devices only.</p>\n            </li>\n            <li>\n               <p>\n                  <code>NEW_PASSWORD_REQUIRED</code>: For users who are required to change their\n                    passwords after successful first login. </p>\n               <p>Respond to this challenge with <code>NEW_PASSWORD</code> and any required\n                    attributes that Amazon Cognito returned in the <code>requiredAttributes</code> parameter.\n                    You can also set values for attributes that aren't required by your user pool\n                    and that your app client can write. For more information, see <a href=\"https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_RespondToAuthChallenge.html\">RespondToAuthChallenge</a>.</p>\n               <note>\n                  <p>In a <code>NEW_PASSWORD_REQUIRED</code> challenge response, you can't modify a required attribute that already has a value.\nIn <code>RespondToAuthChallenge</code>, set a value for any keys that Amazon Cognito returned in the <code>requiredAttributes</code> parameter,\nthen use the <code>UpdateUserAttributes</code> API operation to modify the value of any additional attributes.</p>\n               </note>\n            </li>\n            <li>\n               <p>\n                  <code>MFA_SETUP</code>: For users who are required to setup an MFA factor\n                    before they can sign in. The MFA types activated for the user pool will be\n                    listed in the challenge parameters <code>MFAS_CAN_SETUP</code> value. </p>\n               <p> To set up software token MFA, use the session returned here from\n                        <code>InitiateAuth</code> as an input to\n                    <code>AssociateSoftwareToken</code>. Use the session returned by\n                        <code>VerifySoftwareToken</code> as an input to\n                        <code>RespondToAuthChallenge</code> with challenge name\n                        <code>MFA_SETUP</code> to complete sign-in. To set up SMS MFA, an\n                    administrator should help the user to add a phone number to their account, and\n                    then the user should call <code>InitiateAuth</code> again to restart\n                    sign-in.</p>\n            </li>\n         </ul>"
-					},
-					"Session": {
+					"Username": {
 						"type": "string",
-						"description": "<p>The session that should pass both ways in challenge-response calls to the service. If\n            the caller must pass another challenge, they return a session with other challenge\n            parameters. This session should be passed as it is to the next\n                <code>RespondToAuthChallenge</code> API call.</p>"
+						"description": "<p>The username of the user that you requested.</p>"
 					},
-					"ChallengeParameters": {
-						"$ref": "#/components/schemas/Record_string.string_",
-						"description": "<p>The challenge parameters. These are returned in the <code>InitiateAuth</code> response\n            if you must pass another challenge. The responses in this parameter should be used to\n            compute inputs to the next call (<code>RespondToAuthChallenge</code>). </p>\n         <p>All challenges require <code>USERNAME</code> and <code>SECRET_HASH</code> (if\n            applicable).</p>"
+					"UserAttributes": {
+						"items": {
+							"$ref": "#/components/schemas/AttributeType"
+						},
+						"type": "array",
+						"description": "<p>An array of name-value pairs representing user attributes.</p>\n         <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the\n            attribute name.</p>"
 					},
-					"AuthenticationResult": {
-						"$ref": "#/components/schemas/AuthenticationResultType",
-						"description": "<p>The result of the authentication response. This result is only returned if the caller\n            doesn't need to pass another challenge. If the caller does need to pass another\n            challenge before it gets tokens, <code>ChallengeName</code>,\n                <code>ChallengeParameters</code>, and <code>Session</code> are returned.</p>"
+					"MFAOptions": {
+						"items": {
+							"$ref": "#/components/schemas/MFAOptionType"
+						},
+						"type": "array",
+						"description": "<p>\n            <i>This response parameter is no longer supported.</i> It provides\n            information only about SMS MFA configurations. It doesn't provide information about\n            time-based one-time password (TOTP) software token MFA configurations. To look up\n            information about either type of MFA configuration, use UserMFASettingList\n            instead.</p>"
+					},
+					"PreferredMfaSetting": {
+						"type": "string",
+						"description": "<p>The user's preferred MFA setting.</p>"
+					},
+					"UserMFASettingList": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"description": "<p>The MFA options that are activated for the user. The possible values in this list are\n            <code>SMS_MFA</code>, <code>EMAIL_OTP</code>, and <code>SOFTWARE_TOKEN_MFA</code>.</p>"
 					},
 					"$metadata": {
 						"$ref": "#/components/schemas/ResponseMetadata",
@@ -565,7 +544,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/InitiateAuthCommandOutput"
+									"$ref": "#/components/schemas/GetUserCommandOutput"
 								}
 							}
 						}

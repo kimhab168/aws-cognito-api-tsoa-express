@@ -14,3 +14,20 @@ services:
     volumes:
       - ./src:/app/src # Mounts the 'src' folder from the host machine to '/app/src' in the container.
         # This allows hot reloading, so changes in the host's 'src' directory reflect immediately in the container.
+    depends_on:
+      - mongodb
+  mongodb:
+    container_name: mongodb_container
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: habhab
+      MONGO_INITDB_ROOT_PASSWORD: habhab
+      MONGO_INITDB_DATABASE: habDB
+# store the mongodb_data for permanent even the container restart run
+volumes:
+  mongodb_data:

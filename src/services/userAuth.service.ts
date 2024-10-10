@@ -7,6 +7,9 @@ import {
   SignUpCommand,
   ConfirmSignUpCommand,
   InitiateAuthCommand,
+  GetUserCommandOutput,
+  GetUserCommandInput,
+  GetUserCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { createHmac } from "crypto";
 import { cognitoClient } from "@/configs/cognito.config";
@@ -17,6 +20,21 @@ export class UserAuthService {
   constructor() {
     this.authRepository = new AuthRepository();
   }
+  private async getUserDetail(
+    accessToken: string | undefined
+  ): Promise<GetUserCommandOutput | undefined> {
+    const params: GetUserCommandInput = {
+      AccessToken: accessToken,
+    };
+    try {
+      const command = new GetUserCommand(params);
+      const userData = await cognitoClient.send(command);
+      return userData;
+    } catch (error) {
+      console.log("error get detail with accesstoken");
+    }
+  }
+
   private calculateSecretHash(username: string): string {
     return createHmac("sha256", configs.COGNITO_CLIENT_SECRET!)
       .update(username + configs.COGNITO_CLIENT_ID!)
@@ -34,7 +52,8 @@ export class UserAuthService {
       };
 
       const command = new SignUpCommand(params);
-      await cognitoClient.send(command);
+      const res = await cognitoClient.send(command);
+      console.log(res);
 
       return {
         message: "User has been created!",
@@ -61,7 +80,10 @@ export class UserAuthService {
       };
       const command = new InitiateAuthCommand(params);
       const res = await cognitoClient.send(command);
-      return res;
+      const dataUser = await this.getUserDetail(
+        res.AuthenticationResult?.AccessToken
+      );
+      return dataUser;
     } catch (error) {
       throw error;
     }
@@ -76,7 +98,9 @@ export class UserAuthService {
         SecretHash: this.calculateSecretHash(username),
       };
       const command = new ConfirmSignUpCommand(params);
-      await cognitoClient.send(command);
+      const res = await cognitoClient.send(command);
+      console.log(res);
+
       const data = {
         username: params.Username,
         password: params.SecretHash, ///not to store in DB

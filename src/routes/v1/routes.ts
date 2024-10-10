@@ -78,34 +78,25 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ChallengeNameType": {
-        "dataType": "refAlias",
-        "type": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["ADMIN_NO_SRP_AUTH"]},{"dataType":"enum","enums":["CUSTOM_CHALLENGE"]},{"dataType":"enum","enums":["DEVICE_PASSWORD_VERIFIER"]},{"dataType":"enum","enums":["DEVICE_SRP_AUTH"]},{"dataType":"enum","enums":["EMAIL_OTP"]},{"dataType":"enum","enums":["MFA_SETUP"]},{"dataType":"enum","enums":["NEW_PASSWORD_REQUIRED"]},{"dataType":"enum","enums":["PASSWORD_VERIFIER"]},{"dataType":"enum","enums":["SELECT_MFA_TYPE"]},{"dataType":"enum","enums":["SMS_MFA"]},{"dataType":"enum","enums":["SOFTWARE_TOKEN_MFA"]}],"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Record_string.string_": {
-        "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{},"additionalProperties":{"dataType":"string"},"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "NewDeviceMetadataType": {
+    "AttributeType": {
         "dataType": "refObject",
         "properties": {
-            "DeviceKey": {"dataType":"string"},
-            "DeviceGroupKey": {"dataType":"string"},
+            "Name": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}],"required":true},
+            "Value": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "AuthenticationResultType": {
+    "DeliveryMediumType": {
+        "dataType": "refAlias",
+        "type": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["EMAIL"]},{"dataType":"enum","enums":["SMS"]}],"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "MFAOptionType": {
         "dataType": "refObject",
         "properties": {
-            "AccessToken": {"dataType":"string"},
-            "ExpiresIn": {"dataType":"double"},
-            "TokenType": {"dataType":"string"},
-            "RefreshToken": {"dataType":"string"},
-            "IdToken": {"dataType":"string"},
-            "NewDeviceMetadata": {"ref":"NewDeviceMetadataType"},
+            "DeliveryMedium": {"ref":"DeliveryMediumType"},
+            "AttributeName": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -123,13 +114,14 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "InitiateAuthCommandOutput": {
+    "GetUserCommandOutput": {
         "dataType": "refObject",
         "properties": {
-            "ChallengeName": {"ref":"ChallengeNameType"},
-            "Session": {"dataType":"string"},
-            "ChallengeParameters": {"ref":"Record_string.string_"},
-            "AuthenticationResult": {"ref":"AuthenticationResultType"},
+            "Username": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}],"required":true},
+            "UserAttributes": {"dataType":"union","subSchemas":[{"dataType":"array","array":{"dataType":"refObject","ref":"AttributeType"}},{"dataType":"undefined"}],"required":true},
+            "MFAOptions": {"dataType":"array","array":{"dataType":"refObject","ref":"MFAOptionType"}},
+            "PreferredMfaSetting": {"dataType":"string"},
+            "UserMFASettingList": {"dataType":"array","array":{"dataType":"string"}},
             "$metadata": {"ref":"ResponseMetadata","required":true},
         },
         "additionalProperties": false,
