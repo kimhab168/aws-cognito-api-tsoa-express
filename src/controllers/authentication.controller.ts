@@ -30,24 +30,36 @@ export class AuthenController extends Controller {
   }
   @Post("signup")
   async signUp(@Body() reqBody: SignUpRequest) {
-    return await this.userAuthService.signUp(
-      reqBody.username,
-      reqBody.password,
-      reqBody.email
-    );
+    try {
+      return await this.userAuthService.signUp(
+        reqBody.username,
+        reqBody.password,
+        reqBody.email
+      );
+    } catch (error) {
+      throw error;
+    }
   }
   @Post("signin")
   async signIn(@Body() reqBody: SignInRequest) {
-    return await this.userAuthService.signIn(
-      reqBody.username,
-      reqBody.password
-    );
+    try {
+      return await this.userAuthService.signIn(
+        reqBody.username,
+        reqBody.password
+      );
+    } catch (error) {
+      throw error;
+    }
   }
   @Post("confirm-signup")
   async confirmSignUp(@Body() reqBody: ConfirmSignUpRequest) {
-    return await this.userAuthService.confirmSignUp(
-      reqBody.username,
-      reqBody.confirmationCode
-    );
+    try {
+      return await this.userAuthService.confirmSignUp(
+        reqBody.username,
+        reqBody.confirmationCode
+      );
+    } catch (error) {
+      throw error;
+    }
   }
 }

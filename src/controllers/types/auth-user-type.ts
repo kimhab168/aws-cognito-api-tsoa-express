@@ -1,5 +1,5 @@
 export interface UserAuthType {
-  email: string;
+  username: string;
   password: string;
 }
 export interface UserCreateType {

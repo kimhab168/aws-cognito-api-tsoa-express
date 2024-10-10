@@ -1,15 +1,16 @@
 version: "3.8"
 services:
   backend_sample:
-    container_name: auth_cognito_aws #docker compose's container name
+    container_name: auth_cognito_aws # Sets the name of the Docker container to 'auth_cognito_aws'.
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    restart: always
+      dockerfile: Dockerfile.dev # Specifies that the Dockerfile named 'Dockerfile.dev' should be used to build the image.
+    restart: always # Always restarts the container if it stops or crashes.
     ports:
-      - 3000:3000
-    env_file: ./src/configs/.env.development
+      - 3000:3000 # Maps port 3000 on the host (left) to port 3000 in the container (right).
+    env_file: ./src/configs/.env.development # Specifies the path to the environment file containing variables for the app.
     environment:
-      - DOCKER_ENV=true
+      - DOCKER_ENV=true # Sets an additional environment variable DOCKER_ENV to 'true' inside the container.
     volumes:
-      - ./src:/app/src # HOT RELOADING, ANY CHANGE IN SRC FOLDER OUR APP WILL RESTART
+      - ./src:/app/src # Mounts the 'src' folder from the host machine to '/app/src' in the container.
+        # This allows hot reloading, so changes in the host's 'src' directory reflect immediately in the container.

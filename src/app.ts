@@ -4,6 +4,7 @@ import swaggerUi from "swagger-ui-express";
 import fs from "fs";
 import path from "path";
 import { RegisterRoutes } from "./routes/v1/routes";
+import { globalError } from "./middlewares/globalErrorHandler";
 
 // Dynamically load swagger.json
 const swaggerDocument = JSON.parse(
@@ -40,5 +41,5 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // ERROR Handler
 // ========================
 // Handle Later
-
+app.use(globalError);
 export default app;

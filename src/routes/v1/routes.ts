@@ -68,45 +68,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "DeliveryMediumType": {
-        "dataType": "refAlias",
-        "type": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["EMAIL"]},{"dataType":"enum","enums":["SMS"]}],"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CodeDeliveryDetailsType": {
-        "dataType": "refObject",
-        "properties": {
-            "Destination": {"dataType":"string"},
-            "DeliveryMedium": {"ref":"DeliveryMediumType"},
-            "AttributeName": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResponseMetadata": {
-        "dataType": "refObject",
-        "properties": {
-            "httpStatusCode": {"dataType":"double"},
-            "requestId": {"dataType":"string"},
-            "extendedRequestId": {"dataType":"string"},
-            "cfId": {"dataType":"string"},
-            "attempts": {"dataType":"double"},
-            "totalRetryDelay": {"dataType":"double"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "SignUpCommandOutput": {
-        "dataType": "refObject",
-        "properties": {
-            "UserConfirmed": {"dataType":"union","subSchemas":[{"dataType":"boolean"},{"dataType":"undefined"}],"required":true},
-            "CodeDeliveryDetails": {"ref":"CodeDeliveryDetailsType"},
-            "UserSub": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}],"required":true},
-            "$metadata": {"ref":"ResponseMetadata","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "SignUpRequest": {
         "dataType": "refObject",
         "properties": {
@@ -149,6 +110,19 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResponseMetadata": {
+        "dataType": "refObject",
+        "properties": {
+            "httpStatusCode": {"dataType":"double"},
+            "requestId": {"dataType":"string"},
+            "extendedRequestId": {"dataType":"string"},
+            "cfId": {"dataType":"string"},
+            "attempts": {"dataType":"double"},
+            "totalRetryDelay": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "InitiateAuthCommandOutput": {
         "dataType": "refObject",
         "properties": {
@@ -166,14 +140,6 @@ const models: TsoaRoute.Models = {
         "properties": {
             "username": {"dataType":"string","required":true},
             "password": {"dataType":"string","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ConfirmSignUpCommandOutput": {
-        "dataType": "refObject",
-        "properties": {
-            "$metadata": {"ref":"ResponseMetadata","required":true},
         },
         "additionalProperties": false,
     },

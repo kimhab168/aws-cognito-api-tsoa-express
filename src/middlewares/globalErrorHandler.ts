@@ -16,7 +16,7 @@ export function globalError(
     const errors = error.errors;
 
     console.error(`$UserService - globalErrorHandler() method error: ${error}`);
-    return res.status(status).json({ onmessage, error: errors });
+    return res.status(status).json({ message: error.message, error: errors });
   }
   // Unhandle Error
   console.error(
