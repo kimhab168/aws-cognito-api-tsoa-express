@@ -1,6 +1,12 @@
 // src/controllers/product.controller.ts
-import { Controller, Route, Body, Post, Tags } from "tsoa";
+import { Controller, Route, Body, Post, Tags, Get, Queries } from "tsoa";
 import { UserAuthService } from "@/services/userAuth.service";
+import {
+  GetUserCommand,
+  GetUserCommandInput,
+  GetUserCommandOutput,
+} from "@aws-sdk/client-cognito-identity-provider";
+import { cognitoClient } from "@/configs/cognito.config";
 // import userAuthService from "@/services/userAuth.service";
 
 interface SignUpRequest {
@@ -19,6 +25,21 @@ interface ConfirmSignUpRequest {
   confirmationCode: string;
 }
 
+async function getUserDetail(
+  accessToken: string | undefined
+): Promise<GetUserCommandOutput | undefined> {
+  const params: GetUserCommandInput = {
+    AccessToken: accessToken,
+  };
+  try {
+    const command = new GetUserCommand(params);
+    const userData = await cognitoClient.send(command);
+    return userData;
+  } catch (error) {
+    console.log("error get detail with accesstoken");
+  }
+}
+
 @Route("auth")
 @Tags("Auth")
 export class AuthenController extends Controller {
@@ -31,6 +52,8 @@ export class AuthenController extends Controller {
   @Post("signup")
   async signUp(@Body() reqBody: SignUpRequest) {
     try {
+      console.log("signup controller");
+
       return await this.userAuthService.signUp(
         reqBody.username,
         reqBody.password,
@@ -58,6 +81,14 @@ export class AuthenController extends Controller {
         reqBody.username,
         reqBody.confirmationCode
       );
+    } catch (error) {
+      throw error;
+    }
+  }
+  @Get("viewUser/{token}")
+  async viewUserData(@Queries() qry: { token: string }) {
+    try {
+      return await getUserDetail(qry.token);
     } catch (error) {
       throw error;
     }

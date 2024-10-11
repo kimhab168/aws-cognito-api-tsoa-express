@@ -43,6 +43,7 @@ export class UserAuthService {
 
   public async signUp(username: string, password: string, email: string) {
     try {
+      console.log("signup service");
       const params: SignUpCommandInput = {
         ClientId: configs.COGNITO_CLIENT_ID!,
         Username: username,
@@ -50,9 +51,12 @@ export class UserAuthService {
         UserAttributes: [{ Name: "email", Value: email }],
         SecretHash: this.calculateSecretHash(username),
       };
+      console.log("signup service command");
+      console.log(params);
 
       const command = new SignUpCommand(params);
       const res = await cognitoClient.send(command);
+
       console.log(res);
 
       return {
@@ -62,6 +66,8 @@ export class UserAuthService {
       if (error.name === "UsernameExistsException") {
         throw new ResourceConflictError("User already exist!");
       }
+      console.log("hi bro");
+
       throw error;
     }
   }

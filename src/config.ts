@@ -9,6 +9,8 @@ type Config = {
   COGNITO_CLIENT_ID: string;
   COGNITO_CLIENT_SECRET: string;
   COGNITO_REGION: string;
+  COGNITO_DOMAIN: string;
+  REDIRECT_URL: string;
 };
 
 // Function to load and validate environment variables
@@ -26,6 +28,8 @@ function loadConfig(): Config {
     COGNITO_CLIENT_ID: Joi.string().required(),
     COGNITO_CLIENT_SECRET: Joi.string().required(),
     COGNITO_REGION: Joi.string().required(),
+    COGNITO_DOMAIN: Joi.string().required(),
+    REDIRECT_URL: Joi.string().required(),
   })
     .unknown()
     .required();
@@ -43,6 +47,8 @@ function loadConfig(): Config {
     COGNITO_CLIENT_ID: envVars.COGNITO_CLIENT_ID,
     COGNITO_CLIENT_SECRET: envVars.COGNITO_CLIENT_SECRET,
     COGNITO_REGION: envVars.COGNITO_REGION,
+    COGNITO_DOMAIN: envVars.COGNITO_DOMAIN,
+    REDIRECT_URL: envVars.REDIRECT_URL,
   };
 }
 
