@@ -26,14 +26,21 @@ interface ConfirmSignUpRequest {
 }
 
 async function getUserDetail(
-  accessToken: string | undefined
+  accessToken: string
 ): Promise<GetUserCommandOutput | undefined> {
+  if (!accessToken) {
+    console.log("no acceess Token found");
+    return undefined;
+  }
+
   const params: GetUserCommandInput = {
     AccessToken: accessToken,
   };
   try {
     const command = new GetUserCommand(params);
-    const userData = await cognitoClient.send(command);
+
+    const userData = await cognitoClient.send(command); //bug: fix
+    console.log("hi 2");
     return userData;
   } catch (error) {
     console.log("error get detail with accesstoken");

@@ -1,8 +1,9 @@
 // google-auth.controller.ts
 import { googleAuthToken } from "@/services/google-auth.service"; // Adjust path as necessary
 import { loginWithGoogle } from "@/utils/getUserToken";
-import { Controller, Route, Tags, Get, Queries } from "tsoa";
-
+import { Controller, Route, Tags, Get, Request } from "tsoa";
+import express from "express";
+import { setCookie } from "@/utils/cookies";
 @Route("google-auth/token")
 @Tags("Google Auth")
 export class googleAuthCallback extends Controller {
@@ -14,13 +15,14 @@ export class googleAuthCallback extends Controller {
   }
 
   @Get()
-  async getTokenGoogle(@Queries() query: { code: string; state: string }) {
+  async getTokenGoogle(@Request() req: express.Request) {
     try {
-      const code = query.code;
-      console.log("Received code:", code);
-
-      const res = await this.GoogleAuthToken.getTokenFromCognito(code);
-      return res;
+      const code = req.query.code as string;
+      // const state = req.query.state as string;
+      const token = await this.GoogleAuthToken.getTokenFromCognito(code);
+      const response = req.res as express.Response;
+      setCookie(response, token);
+      return { message: "Success Logged in!" };
     } catch (error) {}
   }
   @Get("link")

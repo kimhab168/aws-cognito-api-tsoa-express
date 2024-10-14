@@ -48,7 +48,7 @@ async function fetchAccessToken(authorizationCode: string) {
     const response = await axios.post(url, body.toString(), {
       headers: headers,
     });
-    console.log("Access Token Response:", response.data);
+    // console.log("Access Token Response:", response.data);
     return response.data; // Return the token response
   } catch (error) {
     throw error;
